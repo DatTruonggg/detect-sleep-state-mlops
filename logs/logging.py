@@ -3,7 +3,7 @@ from typing import TypeVar
 
 import loguru
 
-from configs import config
+from configs import cfg
 
 log_level = "DEBUG"
 log_format = (
@@ -30,4 +30,4 @@ def logger_handler(
     return loguru.logger
 
 
-log = logger_handler(file=config.logging_file)
+log = logger_handler(file=cfg.logging_file)
