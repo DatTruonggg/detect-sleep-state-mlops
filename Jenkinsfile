@@ -43,12 +43,9 @@ pipeline {
                 script {
                     echo 'Deploying application...'
                     sh '''
-                    ssh -o StrictHostKeyChecking=no user@your-server-ip << EOF
-                    docker pull ${registry}:latest
                     docker stop dss-fastapi || true
                     docker rm dss-fastapi || true
                     docker run -d --name dss-fastapi -p 8000:8000 ${registry}:latest
-                    EOF
                     '''
                 }
             }
