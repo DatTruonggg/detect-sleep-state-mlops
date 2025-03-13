@@ -1,17 +1,28 @@
-import joblib
+import mlflow
+import mlflow.sklearn
 import pandas as pd
 from src.utils.feature.feature_extractor import make_features
 from itertools import groupby
 
 class InferenceData:
-    def __init__(self, weight_path: str):
+    def __init__(self, model_name: str, model_stage: str = "current", mlflow_tracking_uri: str = "http://localhost:5000"):
         """
-        Load the model from the specified weight_path.
+        Load the model from MLflow Model Registry.
+        
+        :param model_name: The name of the registered model in MLflow.
+        :param model_stage: The stage of the model to load (e.g., 'Production', 'Staging', 'None').
+        :param mlflow_tracking_uri: The MLflow Tracking Server URI.
         """
         try:
-            self.model = joblib.load(weight_path)
+            # Set MLflow tracking URI
+            mlflow.set_tracking_uri(mlflow_tracking_uri)
+
+            # Load model from MLflow Model Registry
+            model_uri = f"models:/{model_name}/{model_stage}"
+            self.model = mlflow.sklearn.load_model(model_uri)
+            print(f"✅ Loaded model '{model_name}' from MLflow ({model_stage} stage).")
         except Exception as e:
-            raise ValueError(f"❌ Unable to load model from {weight_path}. Error: {e}")
+            raise ValueError(f"❌ Unable to load model from MLflow. Error: {e}")
 
         # List of required features for the model
         self.features = [
@@ -28,14 +39,14 @@ class InferenceData:
         """
         lst_cv = zip(df.series_id, df.smooth)
         lst_poi = []
-        
+
         for (c, v), g in groupby(lst_cv, lambda cv: (cv[0], cv[1] != 0 and not pd.isnull(cv[1]))):
             llg = sum(1 for _ in g)
             if not v:
                 lst_poi.extend([0] * llg)
             else:
                 lst_poi.extend([1] + [0] * (llg - 2) + [1] if llg > 1 else [0])  # 1 -> wakeup, 0 -> onset
-        
+
         return lst_poi
 
     def process(self, data: pd.DataFrame) -> pd.DataFrame:

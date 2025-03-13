@@ -43,7 +43,7 @@ async def predict(file: UploadFile = File(...)):
 
         # Khởi tạo InferenceData với mô hình đã lưu
         model_path = "/app/src/weight/random_forest.pkl"  # Đường dẫn model
-        inference_model = InferenceData(model_path)
+        inference_model = InferenceData(model_name="Random_forest", model_stage="current")
 
         # Thực hiện dự đoán
         predictions = inference_model.process(df)

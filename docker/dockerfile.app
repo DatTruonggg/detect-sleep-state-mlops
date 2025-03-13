@@ -14,7 +14,6 @@ RUN pip install python-multipart pyarrow
 # Copy only the necessary files and directories
 COPY src/utils/feature/feature_extractor.py src/utils/feature/
 COPY src/utils/inference/pose_inference.py src/utils/inference/
-COPY src/weight/random_forest.pkl src/weight/
 COPY src/__init__.py src/
 COPY src/utils/__init__.py src/utils/
 
