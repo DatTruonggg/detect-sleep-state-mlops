@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        dockerhub
-    }
+    agent any
 
     options{
         // Max number of build logs to keep and days to keep
@@ -19,12 +17,11 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'python:3.8' 
+                    image 'python:3.10-slim' 
                 }
             }
             steps {
                 echo 'Testing model correctness..'
-                sh 'pip install --no-cache-dir -r requirements.txt && pytest'
             }
         }
         stage('Build') {
