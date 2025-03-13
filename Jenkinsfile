@@ -9,7 +9,7 @@ pipeline {
     }
 
     environment{
-        registry = 'dattruong1311/dss-fastapi'
+        registry = 'dattruong1311/dss-fastapi:latest'
         registryCredential = 'dockerhub'      
     }
 
