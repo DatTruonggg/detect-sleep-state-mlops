@@ -18,7 +18,7 @@ class InferenceData:
             mlflow.set_tracking_uri(mlflow_tracking_uri)
 
             # Load model from MLflow Model Registry
-            model_uri = f"models:/{model_name}/{model_stage}"
+            model_uri = f"models:/{model_name}@{model_stage}"
             self.model = mlflow.sklearn.load_model(model_uri)
             print(f"✅ Loaded model '{model_name}' from MLflow ({model_stage} stage).")
         except Exception as e:

@@ -3,8 +3,8 @@ version: "3.8"
 services:
   pose-estimation:
     container_name: dss-container
-    image: dattruong1311/dss-fastapi:latest  # Image đã có trên Docker Hub
+    image: dattruong1311/dss-fastapi:latest
     platform: linux/amd64
     ports:
-      - "8000:30000"
+      - "8000:8000"
     restart: unless-stopped
