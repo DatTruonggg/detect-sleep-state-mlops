@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        dockerhub
+    }
 
     options{
         // Max number of build logs to keep and days to keep
