@@ -10,7 +10,7 @@ COPY app/requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
-RUN pip install python-multipart pyarrow
+RUN pip install python-multipart pyarrow mlflow
 # Copy only the necessary files and directories
 COPY src/utils/feature/feature_extractor.py src/utils/feature/
 COPY src/utils/inference/pose_inference.py src/utils/inference/

@@ -6,5 +6,5 @@ services:
     image: dattruong1311/dss-fastapi:latest  # Image đã có trên Docker Hub
     platform: linux/amd64
     ports:
-      - "8000:8000"
+      - "8000:30000"
     restart: unless-stopped
