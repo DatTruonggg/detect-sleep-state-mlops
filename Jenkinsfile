@@ -13,10 +13,15 @@ pipeline {
 
     stages {
         stage('Test') {
+            agent {
+                docker {
+                    image '3.10-slim' 
+                }
+            }
             steps {
                 script {
                     echo 'Running tests...'
-                    sh 'python --version'  // Kiểm tra Python đã cài đúng chưa
+                    sh 'python --version'
                 }
             }
         }
