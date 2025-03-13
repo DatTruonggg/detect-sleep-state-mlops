@@ -51,11 +51,6 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying application locally...'
-                    sh '''
-                    docker stop dss-fastapi || true
-                    docker rm dss-fastapi || true
-                    docker run -d --name dss-fastapi -p 8000:8000 ${registry}:latest
-                    '''
                 }
             }
         }
