@@ -17,7 +17,7 @@ spec:
             service:
               name: {{ .Release.Name }}
               port:
-                number: 30000
+                number: 8000
 
         - path: /openapi.json
           pathType: Prefix
@@ -25,7 +25,7 @@ spec:
             service:
               name: {{ .Release.Name }}
               port:
-                number: 30000
+                number: 8000
 
         - path: /healthcheck
           pathType: Prefix
@@ -33,7 +33,7 @@ spec:
             service:
               name: {{ .Release.Name }}
               port:
-                number: 30000
+                number: 8000
 
         - path: /detect-sleep-state
           pathType: Prefix
@@ -41,4 +41,4 @@ spec:
             service:
               name: {{ .Release.Name }}
               port:
-                number: 30000
+                number: 8000

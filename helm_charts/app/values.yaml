@@ -1,5 +1,5 @@
 
 image:
-  repository: dattruong1311/dss-fastapi:latest
+  repository: dattruong1311/dss-fastapi
   tag: latest
   pullPolicy: Always

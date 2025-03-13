@@ -1,5 +1,5 @@
 apiVersion: v1
-name: detect-sleep-state-system
+name: dss-app
 description: Helm chart for my system
 
 type: application
@@ -12,5 +12,5 @@ version: 0.0.1
 appVersion: latest
 
 maintainers:
-- email: dattruongvuive@gmail.com
-  name: Dattruong
+- email: dattruongg1311@gmail.com
+  name: dattruong1311
