@@ -31,7 +31,7 @@ pipeline {
                         error "Dockerfile not found. Build failed!"
                     }
 
-                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}")
+                    dockerImage = docker.build("${registry}:${BUILD_NUMBER}", "--file docker/dockerfile.app .")
 
                     echo 'Pushing image to Docker Hub...'
                     docker.withRegistry('', registryCredential) {
