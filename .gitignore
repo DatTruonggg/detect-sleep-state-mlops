@@ -12,3 +12,7 @@ test/
 database/
 *.log
 logs_tracking/
+.credentials/
+.terraform/
+.terraform.*
+*.tfstate
