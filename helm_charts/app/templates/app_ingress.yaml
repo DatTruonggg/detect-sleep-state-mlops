@@ -4,9 +4,9 @@ metadata:
   name: {{ .Release.Name }}-nginx-ingress
   namespace: model-serving
   annotations:
-    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: 16m
 spec:
+  ingressClassName: "nginx"
   rules:
     - host: detect-sleep-state.com
       http:
@@ -35,7 +35,7 @@ spec:
               port:
                 number: 8000
 
-        - path: /detect-sleep-state
+        - path: /detect_sleep_state
           pathType: Prefix
           backend:
             service:

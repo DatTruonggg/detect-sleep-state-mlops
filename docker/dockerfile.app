@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY src/ ./src/  
 COPY app/ ./app/
-
+COPY src/weight/* ./src/weight/
 EXPOSE 8000
 
 # Command to run FastAPI app with Uvicorn
