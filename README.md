@@ -367,7 +367,7 @@ The GKE cluster I configured has 1 node and its machine is "e2-standard-4" (4 CP
     ```
 
 - Check the connection from local using `kubectx`
-![kubectx](kubectx.png)
+![kubectx](/assets/kubectx.png)
 
 ### 8. Deploy to GKE
 #### 8.1 Deploy Nginx Service Controller
