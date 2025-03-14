@@ -1,32 +1,18 @@
-# -------------- Data -------------
-data_root_path: ./data/raw
-train_mask_data_path: ./data/raw/mask/train2014/mask_COCO_train2014_
-val_mask_data_path: ./data/raw/mask/val2014/mask_COCO_val2014_
-label_file: label.json
-label_subset_file: label_subset.json
-
-# -------------- Model -------------
-model_weight_path: ./src/weights/pose_model_scratch.pth
-info_summary_file_path: ./src/weights/info.json
-
 # -------------- Logging ----------
 logging_file: ./logs/logging_file.log
 
 # ------------- Hyperparamters ------------
 hyperparameters:
-  n_estimators: 200          # Số lượng cây trong Random Forest
-  min_samples_leaf: 300        # Số mẫu tối thiểu trên một lá
-  random_state: 67           # Để đảm bảo tái lập kết quả
+  n_estimators: 200         
+  min_samples_leaf: 300        
+  random_state: 67           
   n_jobs: -1      
 training_data: ./data/processed/merged_data.parquet
 
-# -------------- DVC remote ---------------
-dvc_remote_name: gcs-storage
-dvc_remote_url: gs://human-pose-data-bucket/data
 
 
 # -------------- MLflow --------------
-experiment_name: openpose-human-pose-training
+experiment_name: dss-training
 
 # -------------- Docker --------------
-image_name: jupi15docker/pose-estimation:latest
+image_name: dattruong1311/dss-api:latest

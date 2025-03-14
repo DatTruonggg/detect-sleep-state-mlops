@@ -12,6 +12,9 @@ test-preprocess-stage:
 merge: 
 	poetry run python -m src.utils.transform.perform_merge_data --df_series data/raw/train_series.parquet --df_events data/raw/train_events.csv --output_dir data/processed/merge
 
+train:
+	poetry run python -m src.utils.task_train
+	
 down: 
 	docker compose -f docker-compose-minio-local.yaml -f docker-compose-mlflow-local.yaml down
 
