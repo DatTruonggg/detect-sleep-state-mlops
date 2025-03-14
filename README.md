@@ -1,4 +1,5 @@
 # Detect Sleep State
+Detecting sleep states is essential for understanding sleep patterns and their impact on health, mood, and behavior. This competition, hosted by the Child Mind Institute, aims to develop models that detect sleep onset and wake times using wrist-worn accelerometer data.
 
 ## Overall Architecture
 ![overall-architecture](/assets/overall-architecture.png)
