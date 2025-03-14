@@ -1,4 +1,18 @@
 services:
+    dss-service:
+        container_name: dss-container
+        build:
+            context: .
+            dockerfile: ./docker/dockerfile.app  
+        image: dattruong1311/dss-fastapi:latest
+        platform: linux/amd64
+        ports:
+        - "8000:8000"
+        volumes:
+        - .:/app 
+        restart: always
+        networks:
+        - backend 
     postgres-db:
         restart: always
         container_name: mlflow-backend

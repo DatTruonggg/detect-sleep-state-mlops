@@ -1,10 +1,19 @@
-version: "3.8"
-
 services:
-  pose-estimation:
+  dss-service:
     container_name: dss-container
+    build:
+      context: .
+      dockerfile: ./docker/dockerfile.app  
     image: dattruong1311/dss-fastapi:latest
     platform: linux/amd64
     ports:
       - "8000:8000"
+    volumes:
+      - .:/app 
     restart: unless-stopped
+    networks:
+      - detect-sleep-states_backend 
+
+networks:
+  detect-sleep-states_backend:
+    external: true  

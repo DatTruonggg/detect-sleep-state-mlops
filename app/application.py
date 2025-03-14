@@ -4,53 +4,63 @@ from fastapi.responses import RedirectResponse
 from loguru import logger
 import pandas as pd
 import io
+import mlflow
+from mlflow.tracking import MlflowClient
 from src.utils.inference.pose_inference import InferenceData
 
-# Khởi tạo FastAPI
+# Initialize FastAPI
 app = FastAPI(
-    author="Dat Truong",
     title="Detect Sleep State",
-    description="Detect sleep state",
+    description="API for detecting sleep state using MLflow models",
     version="0.0.1",
 )
 
-# Cấu hình CORS
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
 )
 
-# Điều hướng trang chính về /docs
+# Redirect the root endpoint to /docs
 @app.get("/", include_in_schema=False)
 async def redirect():
     return RedirectResponse("/docs")
 
-# API kiểm tra trạng thái server
+# API to check server health status
 @app.get("/healthcheck", status_code=status.HTTP_200_OK)
 def healthcheck():
-    return {"healthcheck": "Everything in healthy mode!"}
+    return {"healthcheck": "Everything is running smoothly!"}
 
-# API dự đoán trạng thái ngủ
+# API for sleep state prediction
 @app.post("/detect_sleep_state")
 async def predict(file: UploadFile = File(...)):
     try:
-        # Đọc file parquet từ bytes
+        logger.info(f"📂 Received file: {file.filename}")
+
+        # Read the Parquet file from bytes
         contents = await file.read()
         df = pd.read_parquet(io.BytesIO(contents))
 
-        # Khởi tạo InferenceData với mô hình đã lưu
-        model_path = "/app/src/weight/random_forest.pkl"  # Đường dẫn model
-        inference_model = InferenceData(model_name="Random_forest", model_stage="current")
+        # Validate input data
+        if df.empty:
+            raise ValueError("❌ The input data is empty!")
 
-        # Thực hiện dự đoán
+        # Initialize InferenceData with the registered MLflow model
+        inference_model = InferenceData(model_path="./src/weight/random_forest.pkl")
+        # Perform prediction
         predictions = inference_model.process(df)
 
-        # Trả về kết quả dưới dạng JSON
+        logger.info(f"✅ Prediction completed on {len(df)} data rows.")
+
+        # Return results as JSON
         return predictions.to_dict(orient="records")
 
+    except ValueError as ve:
+        logger.error(f"❌ Data Error: {ve}")
+        raise HTTPException(status_code=400, detail=str(ve))
     except Exception as e:
-        logger.exception(f"❌ Lỗi trong quá trình dự đoán: {e}")
-        raise HTTPException(status_code=500, detail="Errors processing the file")
+        logger.exception(f"❌ Error during prediction: {e}")
+        raise HTTPException(status_code=500, detail="Error processing the file")

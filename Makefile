@@ -34,6 +34,7 @@ tag:
 
 push-image: tag
 	docker push $(DOCKER_REGISTRY)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	
 app-docker:
 	docker compose -f docker-compose-application.yaml up -d
 

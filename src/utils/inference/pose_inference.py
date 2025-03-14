@@ -1,30 +1,41 @@
 import mlflow
 import mlflow.sklearn
 import pandas as pd
+from mlflow.tracking import MlflowClient
 from src.utils.feature.feature_extractor import make_features
 from itertools import groupby
+import joblib
+from loguru import logger
 
 class InferenceData:
-    def __init__(self, model_name: str, model_stage: str = "current", mlflow_tracking_uri: str = "http://localhost:5000"):
+    def __init__(self, model_path: str):
         """
-        Load the model from MLflow Model Registry.
+        Load the model from MLflow Model Registry using alias.
         
         :param model_name: The name of the registered model in MLflow.
-        :param model_stage: The stage of the model to load (e.g., 'Production', 'Staging', 'None').
-        :param mlflow_tracking_uri: The MLflow Tracking Server URI.
+        :param model_stage: The alias of the model to load (e.g., 'current', 'Production', 'Staging').
         """
         try:
-            # Set MLflow tracking URI
-            mlflow.set_tracking_uri(mlflow_tracking_uri)
+            # mlflow_tracking_uri = "http://mlflow-sever:5000"  
+            # mlflow.set_tracking_uri(mlflow_tracking_uri)
 
-            # Load model from MLflow Model Registry
-            model_uri = f"models:/{model_name}@{model_stage}"
-            self.model = mlflow.sklearn.load_model(model_uri)
-            print(f"✅ Loaded model '{model_name}' from MLflow ({model_stage} stage).")
+            # client = MlflowClient()
+            # model_version_info = client.get_model_version_by_alias(model_name, model_stage)
+            # model_version = model_version_info.version
+            # model_uri = f"models:/{model_name}/{model_version}"
+            
+            # # Load model
+            # model_path = mlflow.sklearn.load_model(model_uri) 
+            # logger.info(f"MODEL TYPE: {model_path}")
+
+            # self.model = joblib.load(f"{model_path}")
+            # logger.info(f"✅ Loaded model '{model_name}' version {model_version} from MLflow ({model_stage} alias).")
+            logger.info("Use the local .pkl")
+            self.model = joblib.load(f"{model_path}")           
+            
         except Exception as e:
-            raise ValueError(f"❌ Unable to load model from MLflow. Error: {e}")
-
-        # List of required features for the model
+            logger.info(f"Error: {e}")
+            
         self.features = [
             "hour", "anglez", "anglez_rolling_mean", "anglez_rolling_max", "anglez_rolling_std",
             "anglez_diff", "anglez_diff_rolling_mean", "anglez_diff_rolling_max",
@@ -35,7 +46,7 @@ class InferenceData:
     @staticmethod
     def get_event(df):
         """
-        Identify onset and wakeup events based on the 'smooth' label.
+        Xác định các sự kiện wake-up và onset dựa trên 'smooth' label.
         """
         lst_cv = zip(df.series_id, df.smooth)
         lst_poi = []
@@ -51,42 +62,40 @@ class InferenceData:
 
     def process(self, data: pd.DataFrame) -> pd.DataFrame:
         """
-        Process the input data, extract features, and perform inference.
-        Returns a DataFrame containing only the columns ['series_id', 'step', 'event'].
+        Xử lý dữ liệu đầu vào, trích xuất features và thực hiện inference.
+        Trả về DataFrame chứa ['series_id', 'step', 'event'].
         """
         if data.empty:
             raise ValueError("❌ Input data is empty! Please provide valid data.")
 
-        # Preprocess data
+        # Tiền xử lý dữ liệu
         preprocess_data = make_features(data)
 
-        # Check if all required features are available
+        # Kiểm tra xem có thiếu feature nào không
         missing_features = [f for f in self.features if f not in preprocess_data.columns]
         if missing_features:
             raise ValueError(f"❌ Missing the following required features: {missing_features}")
 
-        # Extract input data for the model
+        # Chuẩn bị dữ liệu cho model
         preprocess_data_test = preprocess_data[self.features]
 
-        # Predict probabilities
+        # Dự đoán xác suất
         probabilities = self.model.predict_proba(preprocess_data_test)
         preprocess_data["not_awake"] = probabilities[:, 0]
         preprocess_data["awake"] = probabilities[:, 1]
 
-        # Smooth the data
+        # Làm mượt dữ liệu
         smoothing_length = 2 * 230
         preprocess_data["score"] = preprocess_data["awake"].rolling(smoothing_length, center=True).mean().fillna(method="bfill").fillna(method="ffill")
         preprocess_data["smooth"] = preprocess_data["not_awake"].rolling(smoothing_length, center=True).mean().fillna(method="bfill").fillna(method="ffill")
 
-        # Round values to determine the state
+        # Làm tròn dữ liệu để xác định trạng thái ngủ
         preprocess_data["smooth"] = preprocess_data["smooth"].round()
         preprocess_data["event"] = self.get_event(preprocess_data)
 
-        # Filter the output to include only the desired columns
+        # Trích xuất kết quả cuối cùng
         result = preprocess_data[["series_id"]].copy()
         result["step"] = preprocess_data.index
-
-        # Map event values: 1 -> 'wakeup', 0 -> 'onset'
         result["event"] = preprocess_data["event"].map({1: "wakeup", 0: "onset"})
 
         print(f"✅ Inference completed on {len(preprocess_data)} data rows.")
