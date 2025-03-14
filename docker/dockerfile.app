@@ -3,6 +3,8 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y unzip
+
 COPY app/requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade pip && \
@@ -10,7 +12,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 COPY src/ ./src/  
 COPY app/ ./app/
-COPY src/weight/* ./src/weight/
+COPY src/weight/*.zip ./src/weight/
+
+
+RUN unzip ./src/weight/*.zip -d ./src/weight/ && rm ./src/weight/*.zip
+
 EXPOSE 8000
 
 # Command to run FastAPI app with Uvicorn

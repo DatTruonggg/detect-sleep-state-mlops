@@ -1,6 +1,6 @@
 services:
   detect-sleep-state:
-    image: dattruong1311/dss-fastapi:latest
+    image: dattruong1311/dss-api:latest
     platform: linux/amd64
     container_name: dss-container
     build:

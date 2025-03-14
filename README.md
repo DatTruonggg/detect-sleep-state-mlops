@@ -1,4 +1,1 @@
-# detect-sleep-state-mlops
-
-![jenkins-test](/assets/images/jenkins-test.png)
-![cicd-success](/assets/images/jenkins-success.png)
+![dss-app-ingress](/assets/images/dss-app-ingress.png)

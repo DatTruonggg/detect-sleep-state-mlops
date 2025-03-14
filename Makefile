@@ -1,4 +1,4 @@
-DOCKER_IMAGE_NAME = dss-fastapi
+DOCKER_IMAGE_NAME = dss-api
 DOCKER_TAG = latest
 DOCKERFILE_PATH = docker/dockerfile.app
 DOCKER_REGISTRY = dattruong1311
@@ -24,10 +24,10 @@ mlflow-local:
 	docker compose -f docker-compose-mlflow-local.yaml up -d
 
 build-app:
-	docker build -f docker/dockerfile.app -t dss-fastapi .
+	docker build -f docker/dockerfile.app -t dss-api .
 
 run-app: 
-	docker run -p 8000:8000 dss-fastapi
+	docker run -p 8000:8000 dss-api
 
 tag:
 	docker tag $(DOCKER_IMAGE_NAME):$(DOCKER_TAG) $(DOCKER_REGISTRY)/$(DOCKER_IMAGE_NAME):$(DOCKER_TAG)

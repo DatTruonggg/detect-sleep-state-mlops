@@ -31,7 +31,6 @@ pipeline {
                 script {
                     echo 'Building Docker image...'
 
-                    // Kiểm tra xem Dockerfile có tồn tại không
                     if (!fileExists('docker/dockerfile.app')) {
                         error "Dockerfile not found. Build failed!"
                     }
