@@ -1,7 +1,7 @@
 # Detect Sleep State
 Detecting sleep states is essential for understanding sleep patterns and their impact on health, mood, and behavior. This competition, hosted by the Child Mind Institute, aims to develop models that detect sleep onset and wake times using wrist-worn accelerometer data.
 
-Kaggle Competition: [Detect Sleep State](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/overview)
+Kaggle Competition: [Detect Sleep S](https://www.kaggle.com/competitions/child-mind-institute-detect-sleep-states/overview)
 ## Overall Architecture
 ![overall-architecture](/assets/overall-architecture.png)
 
@@ -140,7 +140,7 @@ make merge
 ```
 
 ### 3. Explore data analysis (EDA) and Baseline
-You can refer to this notebook [baseline.ipynb notebook](/media/dattruong/568836F88836D669/dattruong/MLE/Project/Detect-sleep-states/notebooks/baseline.ipynb) to explore the baseline, possibly to gain a better understanding of the dataset's structure, contents, and any potential insights it may offer.
+You can refer to this notebook [baseline.ipynb notebook](/notebooks/baseline.ipynb) to explore the baseline, possibly to gain a better understanding of the dataset's structure, contents, and any potential insights it may offer.
     
 ### 4. Train
 
