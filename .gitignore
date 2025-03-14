@@ -16,3 +16,5 @@ logs_tracking/
 .terraform/
 .terraform.*
 *.tfstate
+mlruns/
+terraform.tfstate.backup
